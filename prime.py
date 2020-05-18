@@ -36,9 +36,9 @@ def sum_primes(num):
     return sum
 
 
-@app.route("/")
-def hello():
-    return "Server successfully started!"
+# @app.route("/")
+# def hello():
+#     return "Server successfully started!"
 
 @app.route("/factorial")
 def get_factorial():
@@ -62,24 +62,25 @@ def get_factorial():
 
 
 
-@app.route("/sumprime")
+@app.route("/")
 def detect_prime():
     try:
         num = int(request.args.get('num'))
     except TypeError:
+        num=3249
         data = {'status':422, 'errormsg': 'Parameter  Not Found'}
     except ValueError:
+        num=3249
         data = {'status':422, 'errormsg': 'Parameter Error'}
+    if num>=0:
+        data = {
+            'status':200,
+            'number': num,
+            'sumprimes': sum_primes(num),
+            'msg':'The sum of all primes less than %d is %d' % (num, sum_primes(num))
+        }
     else:
-        if num>=0:
-            data = {
-                'status':200,
-                'number': num,
-                'sumprimes': sum_primes(num),
-                'msg':'The sum of all primes less than %d is %d' % (num, sum_primes(num))
-            }
-        else:
-            data = {'status':422, 'errormsg': 'Parameter num should grater than or equal to zreo'}
+        data = {'status':422, 'errormsg': 'Parameter num should grater than or equal to zreo'}
         
     return Response(json.dumps(data), mimetype='application/json')
 
